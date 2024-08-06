@@ -1,0 +1,9 @@
+{
+  "roles": [
+    { "id": 1, "name": "Admin" },
+    { "id": 2, "name": "User" }
+  ],
+  "users": [
+    { "id": 1, "username": "admin", "password": "admin123", "email": "admin@example.com", "role_id": 1 }     
+  ]
+}
