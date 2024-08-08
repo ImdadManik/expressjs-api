@@ -1,7 +1,7 @@
 
 ```
 digibriq-api
-├─ db.json
+├─ database.json
 ├─ package-lock.json
 ├─ package.json
 ├─ routes
@@ -11,6 +11,6 @@ digibriq-api
 ├─ server.js
 └─ utils
    ├─ authMiddleware.js
-   └─ db.json
+   └─ database.json
 
 ```
