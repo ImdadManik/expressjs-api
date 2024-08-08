@@ -2,11 +2,14 @@ const express = require('express');
 const jsonServer = require('json-server');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const authMiddleware = require('./utils/authMiddleware');
+const { authenticateToken } = require('./utils/authMiddleware');
 const authRoutes = require('./routes/authRoutes');
+const roleRoutes = require('./routes/roleRoutes');
+const userRoutes = require('./routes/userRoutes');
+const projectRoutes = require('./routes/projectRoutes');
 
 const app = express();
-const router = jsonServer.router('db.json');
+const router = jsonServer.router('database.json');
 const middlewares = jsonServer.defaults();
 
 app.use(bodyParser.json());
@@ -17,9 +20,13 @@ app.use(middlewares);
 app.use('/api/auth', authRoutes);
 
 // Authorization middleware
-app.use(authMiddleware);
+app.use(authenticateToken);
 
-// Use default router for CRUD operations
+// Protected routes
+app.use('/api/roles', roleRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/projects', projectRoutes);
+// Use default router for remaining CRUD operations
 app.use('/api', router);
 
 app.listen(3000, () => {
