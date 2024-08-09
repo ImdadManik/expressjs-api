@@ -1,72 +1,124 @@
 {
+  "USERS": [
+    {
+      "ID": 1,
+      "FIRSTNAME": "ADMIN",
+      "LASTNAME": "KHAN",
+      "EMAIL": "ADMIN@MAIL.COM",
+      "PASSWORD": "$2A$10$TLHIGYKQBOPPMI.ZPLBARESACJ4X7/JK5AJ/MKESDYXLUSXYC/O5Q",
+      "ROLE": "ADMIN"
+    },
+    {
+      "ID": 2,
+      "FIRSTNAME": "Imdad",
+      "LASTNAME": "Manik",
+      "EMAIL": "imdad@mail.com",
+      "PASSWORD": "$2a$10$d4AuI1Uk5AoaCMmJhweL9e2siRZHWGMCGyQkC.nJlWVb12cv0oBWW",
+      "ROLE": "ADMIN"
+    },
+    {
+      "ID": null,
+      "FIRSTNAME": "Imdad1",
+      "LASTNAME": "Manik1",
+      "EMAIL": "imdad@gmail.com",
+      "PASSWORD": "$2a$10$hkGABODM2gx3/iNjw0PJfebLyWdOxM9IVOpCNd6ZOVLnnbRWHxxx.",
+      "ROLE": "MANAGER"
+    }
+  ],
+  "PROJECTS": [
+    {
+      "ID": 1,
+      "NAME": "PROJECT 1",
+      "DESCRIPTION": "THIS IS PROJECT 1",
+      "START_DATE": "2024-01-01",
+      "END_DATE": "2024-12-12",
+      "CITY": "NEW YORK",
+      "PHONE": "123-456-7890"
+    }
+  ],
+  "PROJECT_USERS": [
+    {
+      "PROJECT_ID": 1,
+      "USER_ID": 2
+    }
+  ],
+  "ROLES": [
+    {
+      "ROLE": "ADMIN",
+      "PERMISSION": []
+    },
+    {
+      "ROLE": "VIEWER",
+      "PERMISSION": [
+        "VIEW_TABLES",
+        "GENREPORTS",
+        "VIEW_HISTORY",
+        "VIEW_3DMODELS"
+      ]
+    },
+    {
+      "ROLE": "EDITOR",
+      "PERMISSION": [
+        "VIEW_TABLES",
+        "GENREPORTS",
+        "VIEW_HISTORY",
+        "VIEW_3DMODELS",
+        "TABLE_MANUAL",
+        "TABLE_DUPLICATE",
+        "TABLE_UPLOAD",
+        "TABLE_EDIT",
+        "TABLE_DELETE",
+        "TABLE_RECOVER",
+        "TABLE_EDIT_3DMODEL"
+      ]
+    },
+    {
+      "ROLE": "MANAGER",
+      "PERMISSION": [
+        "VIEW_TABLES",
+        "GENREPORTS",
+        "VIEW_HISTORY",
+        "VIEW_3DMODELS",
+        "TABLE_MANUAL",
+        "TABLE_DUPLICATE",
+        "TABLE_UPLOAD",
+        "TABLE_EDIT",
+        "TABLE_DELETE",
+        "TABLE_RECOVER",
+        "TABLE_EDIT_3DMODEL",
+        "PERMISSION_ASSIGNS",
+        "SETTINGS",
+        "UPLOAD_3DMODEL",
+        "PROGRESS_COLOR",
+        "LOCK_TABLE",
+        "UNLOCK_TABLE"
+      ]
+    }
+  ],
   "users": [
     {
-      "id": 1,
-      "firstname": "example",
-      "lastname": "example",
-      "email": "example@example.com",
-      "password": "example@v",
-      "role": "example"
-    }
-  ],
-  "projects": [
-    {
-      "id": 1,
-      "name": "Project Alpha",
-      "description": "First construction project",
-      "start_date": "2023-01-15",
-      "end_date": "2023-12-31",
-      "user_id": 1
+      "ID": 1,
+      "FIRSTNAME": "ADMIN",
+      "LASTNAME": "KHAN",
+      "EMAIL": "ADMIN@MAIL.COM",
+      "PASSWORD": "$2A$10$TLHIGYKQBOPPMI.ZPLBARESACJ4X7/JK5AJ/MKESDYXLUSXYC/O5Q",
+      "ROLE": "ADMIN"
     },
     {
-      "name": "Project Gamma",
-      "description": "Third construction project",
-      "start_date": "2024-01-01",
-      "end_date": "2024-12-31",
-      "user_id": 3,
-      "id": 2
+      "ID": 2,
+      "FIRSTNAME": "Imdad",
+      "LASTNAME": "Manik",
+      "EMAIL": "imdad@mail.com",
+      "PASSWORD": "$2a$10$d4AuI1Uk5AoaCMmJhweL9e2siRZHWGMCGyQkC.nJlWVb12cv0oBWW",
+      "ROLE": "ADMIN"
     },
     {
-      "name": "Nesla Tower",
-      "description": "Nesla tower shahre faisal",
-      "start_date": "2024-01-01",
-      "end_date": "2024-12-31",
-      "user_id": 1,
-      "id": 3
-    },
-    {
-      "name": "Zulekha",
-      "description": "Zulekha shahre faisal",
-      "start_date": "2024-01-01",
-      "end_date": "2024-12-31",
-      "user_id": 1,
-      "id": 4
-    }
-  ],
-  "progress": [
-    {
-      "id": 1,
-      "project_id": 1,
-      "date": "2023-02-01",
-      "description": "Foundation completed",
-      "status": "Completed",
-      "user_id": 1
-    },
-    {
-      "id": 2,
-      "project_id": 1,
-      "date": "2023-03-01",
-      "description": "Walls erected",
-      "status": "In Progress",
-      "user_id": 1
-    },
-    {
-      "id": 3,
-      "project_id": 2,
-      "date": "2023-06-15",
-      "description": "Initial planning",
-      "status": "Completed",
-      "user_id": 2
+      "ID": null,
+      "FIRSTNAME": "Imdad1",
+      "LASTNAME": "Manik1",
+      "EMAIL": "manik@mail.com",
+      "PASSWORD": "$2a$10$hkGABODM2gx3/iNjw0PJfebLyWdOxM9IVOpCNd6ZOVLnnbRWHxxx.",
+      "ROLE": "MANAGER"
     }
   ]
 }

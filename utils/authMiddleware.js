@@ -2,40 +2,52 @@
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'thisismykey';
 
-function authenticateToken(req, res, next) {
-  const token = req.headers['authorization'];
-  if (!token) {
-    return res.status(403).json({ message: 'No token provided' });
-  }
+function authenticateToken(req, res, next) {  
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Extract token from "Bearer token"
 
-  jwt.verify(token.split(' ')[1], SECRET_KEY, (err, decoded) => {
-    if (err) {
-      return res.status(500).json({ message: 'Failed to authenticate token' });
-    }
-
-    req.user = decoded;
+  if (!token) return res.status(403).json({ message: 'No token provided' });
+  
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+    if (err) return res.status(403).json({ message: 'Failed to authenticate token' });
+    req.user = decoded; 
     next();
-  });
+  }); 
 }
-
-function authorizeRole(role) {
+ 
+// Middleware to authorize based on roles
+const authorizeRole = (roles) => {
   return (req, res, next) => {
-    if (req.user.role_id === role) {
-      next();
-    } else {
-      res.sendStatus(403);
+    const db = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+    const userRole = req.user.role; // assuming user's role is set as req.user.role 
+    if (!roles.includes(userRole)) {
+      return res.status(403).json({ message: 'Access denied' });
     }
+    next();
+  };
+};
+ 
+// Middleware to check if user has at least one of the required permissions
+function authorizePermission(requiredPermissions) {
+  return (req, res, next) => { 
+      // Extract the permissions from the user's token (or however you're storing them)
+      const userPermissions = req.user.permissions || [];
+      console.log("user permission: " + userPermissions);
+      // Check if userPermissions contains at least one of the requiredPermissions
+      const hasPermission = requiredPermissions.some(permission => userPermissions.includes(permission));
+
+      if (hasPermission) {
+          return next();
+      }
+
+      return res.status(403).send('Forbidden: Insufficient permissions');
   };
 }
 
-function authorizeRoles(roles) {
-  return (req, res, next) => {
-    if (roles.includes(req.user.role_id)) {
-      next();
-    } else {
-      res.sendStatus(403);
-    }
-  };
-}
-
-module.exports = { authenticateToken, authorizeRole, authorizeRoles };
+module.exports = {
+  authenticateToken,
+  authorizeRole,
+  authorizePermission
+};
+  
+module.exports = { authenticateToken, authorizeRole, authorizePermission };

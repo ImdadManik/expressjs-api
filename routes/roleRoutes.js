@@ -1,4 +1,3 @@
-// routes/roleRoutes.js
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -7,46 +6,45 @@ const router = express.Router();
 
 // Get all roles
 router.get('/', authenticateToken, (req, res) => {
-  const roles = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).roles;
+  const roles = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).ROLES;
   res.json(roles);
 });
 
 // Admin CRUD operations for roles
-router.post('/', authenticateToken, authorizeRole(1), (req, res) => {
-  const { name } = req.body;
-  const roles = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).roles;
+router.post('/', authenticateToken, authorizeRole('ADMIN'), (req, res) => {
+  const { ROLE, PERMISSION } = req.body;
+  const db = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8'));
   const newRole = {
-    id: roles.length ? Math.max(roles.map(r => r.id)) + 1 : 1,
-    name
+    ROLE,
+    PERMISSION
   };
-  roles.push(newRole);
-  fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify({ roles, users: JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).users }, null, 2));
+  db.ROLES.push(newRole);
+  fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify(db, null, 2));
   res.status(201).json(newRole);
 });
 
-router.put('/:id', authenticateToken, authorizeRole(1), (req, res) => {
-  const { id } = req.params;
-  const { name } = req.body;
-  const roles = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).roles;
-  const roleIndex = roles.findIndex(r => r.id === parseInt(id));
+router.put('/:role', authenticateToken, authorizeRole('ADMIN'), (req, res) => {
+  const { role } = req.params;
+  const { PERMISSION } = req.body;
+  const db = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8'));
+  const roleIndex = db.ROLES.findIndex(r => r.ROLE === role);
 
   if (roleIndex === -1) return res.status(404).json({ message: 'Role not found' });
 
-  const updatedRole = { ...roles[roleIndex], name };
-  roles[roleIndex] = updatedRole;
-  fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify({ roles, users: JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).users }, null, 2));
-  res.json(updatedRole);
+  db.ROLES[roleIndex].PERMISSION = PERMISSION;
+  fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify(db, null, 2));
+  res.json(db.ROLES[roleIndex]);
 });
 
-router.delete('/:id', authenticateToken, authorizeRole(1), (req, res) => {
-  const { id } = req.params;
-  const roles = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).roles;
-  const roleIndex = roles.findIndex(r => r.id === parseInt(id));
+router.delete('/:role', authenticateToken, authorizeRole('ADMIN'), (req, res) => {
+  const { role } = req.params;
+  const db = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8'));
+  const roleIndex = db.ROLES.findIndex(r => r.ROLE === role);
 
   if (roleIndex === -1) return res.status(404).json({ message: 'Role not found' });
 
-  roles.splice(roleIndex, 1);
-  fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify({ roles, users: JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).users }, null, 2));
+  db.ROLES.splice(roleIndex, 1);
+  fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify(db, null, 2));
   res.status(204).end();
 });
 
