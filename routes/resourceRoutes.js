@@ -33,6 +33,12 @@ router.get('/admin/resource', authenticateToken, authorizeRole(['ADMIN','VIEWER'
 //     res.status(200).send("Hello, you have access to a protected resource that requires admin role and delete authority.");
 // });
 
+// Admin Resource Routes
+router.get('/user/resource', authenticateToken, authorizeRole(['ADMIN','VIEWER','EDITOR','MANAGER']), authorizePermission(permission), (req, res) => {
+    res.status(200).send("Hello, you have access to a protected resource that requires admin role and read authority.");
+});
+
+
 // User Resource Routes
 router.post('/user/resource', authenticateToken, authorizeRole(['ADMIN','VIEWER','EDITOR','MANAGER']), authorizePermission(permission), (req, res) => {
     res.status(200).send("Hello, you have access to a protected resource that requires user role and write authority.");

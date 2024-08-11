@@ -42,7 +42,7 @@ router.put('/:id', authenticateToken, (req, res) => {
 // Get current user
 router.get('/me', authenticateToken, (req, res) => { 
   const db = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
-  const user = db.users.find(u => u.ID === req.user.ID);
+  const user = db.users.find(u => u.id === req.user.id);
   res.json(user);
 });
 

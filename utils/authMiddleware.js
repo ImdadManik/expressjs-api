@@ -1,16 +1,22 @@
 // utils/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'thisismykey';
 
 function authenticateToken(req, res, next) {  
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]; // Extract token from "Bearer token"
-
+  console.log('roles token: '+ token);
   if (!token) return res.status(403).json({ message: 'No token provided' });
   
-  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ message: 'Failed to authenticate token' });
-    req.user = decoded; 
+
+    /*
+    this commented section will implemented when goes to deploy it should blacklist the token after logout
+    Check if the token is blacklisted (optional)
+    const blacklistedTokens = JSON.parse(fs.readFileSync(dbPath)).blacklistedTokens || [];
+    if (blacklistedTokens.includes(token)) return res.sendStatus(403);
+     */
+    req.user = decoded;  
     next();
   }); 
 }
@@ -20,6 +26,7 @@ const authorizeRole = (roles) => {
   return (req, res, next) => {
     const db = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
     const userRole = req.user.role; // assuming user's role is set as req.user.role 
+    console.log("authorize roles: " + userRole);
     if (!roles.includes(userRole)) {
       return res.status(403).json({ message: 'Access denied' });
     }

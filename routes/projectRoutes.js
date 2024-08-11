@@ -12,7 +12,7 @@ router.get('/', authenticateToken, (req, res) => {
   res.json(db.projects);
 });
 
-// Get project by ID
+// Get project by id
 router.get('/:id', authenticateToken, (req, res) => {
   const { id } = req.params;
   const db = JSON.parse(fs.readFileSync(dbPath, 'utf8'));

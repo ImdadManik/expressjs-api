@@ -9,6 +9,8 @@ const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const resourceRoutes = require('./routes/resourceRoutes'); 
 const logRequest = require('./utils/logRequest');
+require('dotenv').config();
+
 
 const app = express();
 const router = jsonServer.router('database.json');
