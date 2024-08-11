@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'thisismykey';
 
-function authenticateToken(req, res, next) {
+function authMiddleware(req, res, next) {
   const token = req.headers['authorization'];
   if (!token) {
     return res.status(403).json({ message: 'No token provided' });
@@ -13,29 +13,10 @@ function authenticateToken(req, res, next) {
       return res.status(500).json({ message: 'Failed to authenticate token' });
     }
 
-    req.user = decoded;
+    req.userId = decoded.id;
+    req.userRole = decoded.role_id;
     next();
   });
 }
 
-function authorizeRole(role) {
-  return (req, res, next) => {
-    if (req.user.role_id === role) {
-      next();
-    } else {
-      res.sendStatus(403);
-    }
-  };
-}
-
-function authorizeRoles(roles) {
-  return (req, res, next) => {
-    if (roles.includes(req.user.role_id)) {
-      next();
-    } else {
-      res.sendStatus(403);
-    }
-  };
-}
-
-module.exports = { authenticateToken, authorizeRole, authorizeRoles };
+module.exports = authMiddleware;

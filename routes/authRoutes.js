@@ -7,15 +7,14 @@ const path = require('path');
 const router = express.Router();
 
 const SECRET_KEY = 'thisismykey';
-const dbPath = path.join(__dirname, '../database.json');
+const dbPath = path.join(__dirname, '../db.json');
 
 // Register route
 router.post('/register', (req, res) => {
-  const { firstname, lastname, password, email, role_id} = req.body;
-  console.log(req.body);
+  const { username, password, email, role_id } = req.body;
   const db = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
   const users = db.users;
-  const userExists = users.some(u => u.email === email);
+  const userExists = users.some(u => u.username === username);
 
   if (userExists) {
     return res.status(400).json({ message: 'Username already exists' });
@@ -26,13 +25,11 @@ router.post('/register', (req, res) => {
 
     const newUser = {
       id: users.length ? Math.max(users.map(u => u.id)) + 1 : 1,
-      firstname,
-      lastname,
+      username,
       password: hashedPassword,
       email,
       role_id
     };
-    console.log(newUser);
     users.push(newUser);
     db.users = users;
     fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
@@ -42,10 +39,10 @@ router.post('/register', (req, res) => {
 
 // Login route
 router.post('/login', (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
   const db = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
   const users = db.users;
-  const user = users.find(u => u.email === email);
+  const user = users.find(u => u.username === username);
 
   if (!user) {
     return res.status(401).json({ message: 'Invalid credentials' });

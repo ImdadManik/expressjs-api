@@ -9,8 +9,8 @@ const router = express.Router();
 // Update user route
 router.put('/:id', authenticateToken, (req, res) => {
   const { id } = req.params;
-  const { firstname, lastname, email, password } = req.body;
-  const users = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).users;
+  const { username, email, password } = req.body;
+  const users = JSON.parse(fs.readFileSync(path.join(__dirname, '../db.json'), 'utf8')).users;
   const userIndex = users.findIndex(u => u.id === parseInt(id));
 
   if (userIndex === -1) return res.status(404).json({ message: 'User not found' });
@@ -24,29 +24,29 @@ router.put('/:id', authenticateToken, (req, res) => {
     bcrypt.hash(password, 10, (err, hashedPassword) => {
       if (err) return res.status(500).json({ message: 'Server error' });
 
-      const updatedUser = { ...users[userIndex], firstname, lastname, email, password: hashedPassword };
+      const updatedUser = { ...users[userIndex], username, email, password: hashedPassword };
       users[userIndex] = updatedUser;
-      fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify({ roles: JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).roles, users }, null, 2));
+      fs.writeFileSync(path.join(__dirname, '../db.json'), JSON.stringify({ roles: JSON.parse(fs.readFileSync(path.join(__dirname, '../db.json'), 'utf8')).roles, users }, null, 2));
       res.json(updatedUser);
     });
   } else {
-    const updatedUser = { ...users[userIndex], firstname, lastname, email };
+    const updatedUser = { ...users[userIndex], username, email };
     users[userIndex] = updatedUser;
-    fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify({ roles: JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).roles, users }, null, 2));
+    fs.writeFileSync(path.join(__dirname, '../db.json'), JSON.stringify({ roles: JSON.parse(fs.readFileSync(path.join(__dirname, '../db.json'), 'utf8')).roles, users }, null, 2));
     res.json(updatedUser);
   }
 });
 
 // Get current user
 router.get('/me', authenticateToken, (req, res) => {
-  const user = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).users.find(u => u.id === req.user.id);
+  const user = JSON.parse(fs.readFileSync(path.join(__dirname, '../db.json'), 'utf8')).users.find(u => u.id === req.user.id);
   res.json(user);
 });
 
 // Admin CRUD operations for users
-router.post('/', authenticateToken, authorizeRole(1), (req, res) => {
-  const { firstname, lastname, username, password, email, role } = req.body;
-  const users = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).users;
+router.post('/', authenticateToken, authorizeRole([1]), (req, res) => {
+  const { username, password, email, role_id } = req.body;
+  const users = JSON.parse(fs.readFileSync(path.join(__dirname, '../db.json'), 'utf8')).users;
   const userExists = users.some(u => u.username === username);
 
   if (userExists) {
@@ -58,33 +58,31 @@ router.post('/', authenticateToken, authorizeRole(1), (req, res) => {
 
     const newUser = {
       id: users.length ? Math.max(users.map(u => u.id)) + 1 : 1,
-      firstname,
-      lastname,
       username,
       password: hashedPassword,
       email,
-      role
+      role_id
     };
     users.push(newUser);
-    fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify({ roles: JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).roles, users }, null, 2));
+    fs.writeFileSync(path.join(__dirname, '../db.json'), JSON.stringify({ roles: JSON.parse(fs.readFileSync(path.join(__dirname, '../db.json'), 'utf8')).roles, users }, null, 2));
     res.status(201).json(newUser);
   });
 });
 
-router.get('/', authenticateToken, authorizeRole(1), (req, res) => {
-  const users = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).users;
+router.get('/', authenticateToken, authorizeRole([1]), (req, res) => {
+  const users = JSON.parse(fs.readFileSync(path.join(__dirname, '../db.json'), 'utf8')).users;
   res.json(users);
 });
 
-router.delete('/:id', authenticateToken, authorizeRole(1), (req, res) => {
+router.delete('/:id', authenticateToken, authorizeRole([1]), (req, res) => {
   const { id } = req.params;
-  const users = JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).users;
+  const users = JSON.parse(fs.readFileSync(path.join(__dirname, '../db.json'), 'utf8')).users;
   const userIndex = users.findIndex(u => u.id === parseInt(id));
 
   if (userIndex === -1) return res.status(404).json({ message: 'User not found' });
 
   users.splice(userIndex, 1);
-  fs.writeFileSync(path.join(__dirname, '../database.json'), JSON.stringify({ roles: JSON.parse(fs.readFileSync(path.join(__dirname, '../database.json'), 'utf8')).roles, users }, null, 2));
+  fs.writeFileSync(path.join(__dirname, '../db.json'), JSON.stringify({ roles: JSON.parse(fs.readFileSync(path.join(__dirname, '../db.json'), 'utf8')).roles, users }, null, 2));
   res.status(204).end();
 });
 
