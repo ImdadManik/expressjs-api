@@ -1,0 +1,98 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "firstname": "ADMIN",
+      "lastname": "KHAN",
+      "email": "ADMIN@MAIL.COM",
+      "password": "$2A$10$TLHIGYKQBOPPMI.ZPLBARESACJ4X7/JK5AJ/MKESDYXLUSXYC/O5Q",
+      "role": "ADMIN"
+    },
+    {
+      "id": 2,
+      "firstname": "Imdad",
+      "lastname": "Manik",
+      "email": "imdad@gmail.com",
+      "password": "$2a$10$d4AuI1Uk5AoaCMmJhweL9e2siRZHWGMCGyQkC.nJlWVb12cv0oBWW",
+      "role": "ADMIN"
+    },
+    {
+      "id": 3,
+      "firstname": "Imdad1",
+      "lastname": "Manik1",
+      "email": "manik@gmail.com",
+      "password": "$2a$10$d4AuI1Uk5AoaCMmJhweL9e2siRZHWGMCGyQkC.nJlWVb12cv0oBWW",
+      "role": "VIEWER"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "PROJECT 1",
+      "description": "THIS IS PROJECT 1",
+      "start_date": "2024-01-01",
+      "end_date": "2024-12-12",
+      "city": "NEW YORK",
+      "phone": "123-456-7890"
+    }
+  ],
+  "project_users": [
+    {
+      "project_id": 1,
+      "user_id": 2
+    }
+  ],
+  "roles": [
+    {
+      "role": "ADMIN",
+      "permission": []
+    },
+    {
+      "role": "VIEWER",
+      "permission": [
+        "VIEW_TABLES",
+        "GENREPORTS",
+        "VIEW_HISTORY",
+        "VIEW_3DMODELS"
+      ]
+    },
+    {
+      "role": "EDITOR",
+      "permission": [
+        "VIEW_TABLES",
+        "GENREPORTS",
+        "VIEW_HISTORY",
+        "VIEW_3DMODELS",
+        "TABLE_MANUAL",
+        "TABLE_DUPLICATE",
+        "TABLE_UPLOAD",
+        "TABLE_EDIT",
+        "TABLE_DELETE",
+        "TABLE_RECOVER",
+        "TABLE_EDIT_3DMODEL"
+      ]
+    },
+    {
+      "role": "MANAGER",
+      "permission": [
+        "VIEW_TABLES",
+        "GENREPORTS",
+        "VIEW_HISTORY",
+        "VIEW_3DMODELS",
+        "TABLE_MANUAL",
+        "TABLE_DUPLICATE",
+        "TABLE_UPLOAD",
+        "TABLE_EDIT",
+        "TABLE_DELETE",
+        "TABLE_RECOVER",
+        "TABLE_EDIT_3DMODEL",
+        "PERMISSION_ASSIGNS",
+        "SETTINGS",
+        "UPLOAD_3DMODEL",
+        "PROGRESS_COLOR",
+        "LOCK_TABLE",
+        "UNLOCK_TABLE"
+      ]
+    }
+  ]
+}
